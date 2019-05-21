@@ -16,7 +16,11 @@ export default class CardComponent extends React.Component<ICardProps>{
     const { car } = this.props
     return (
       <div className="card">
-        {car.model_name}
+        <div className="card__info">
+          <div className="card__info__name">
+            {car.model_name}
+          </div>
+        </div>
       </div>
     )
   }
