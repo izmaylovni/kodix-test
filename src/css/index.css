@@ -1,0 +1,9 @@
+@import './bootstrap.min.css';
+
+body{
+  background: #eeeeee;
+}
+
+.App{
+  margin-top: 20px;
+}

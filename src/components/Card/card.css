@@ -1,0 +1,21 @@
+.card {
+  background: white;
+  border-radius: 5px;
+  margin-bottom: 20px;
+
+  &__info {
+    padding: 20px 10px;
+
+    &__image {
+      text-align: center;
+
+      img {
+        max-height: 150px;
+        max-width: 100%;
+      }
+    }
+
+    &__name {}
+  }
+
+}

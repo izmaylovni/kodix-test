@@ -1,21 +1,40 @@
 import React from 'react';
-import './App.css';
-import cars from './cars'
-import { ICar } from './types'
-import CardComponent from './components/Card'
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk'
+import './css/index.css';
+import Catalog from './components/Catalog'
+import { fetchCars } from './store/actions';
 
-const App: React.FC = () => {
-  const cards = cars.map((car: ICar) => {
-    console.log('car:', car);
-    
-    return <CardComponent key={car.id} car={car} />
-  })
-
-  return (
-    <div className="App">
-      {cards}
-    </div>
-  );
+interface ConnectedDispatch {
+  fetchCars: () => void
 }
 
-export default App;
+class App extends React.Component<ConnectedDispatch> {
+  componentDidMount() {
+    console.log('this.props:', this.props);
+    this.props.fetchCars()
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div className="container">
+          <Catalog />
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): ConnectedDispatch => {
+  return {
+    fetchCars: async () => {
+      await dispatch(fetchCars())
+    },
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App)
