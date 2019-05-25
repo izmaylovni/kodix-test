@@ -20,6 +20,9 @@ export default class CardComponent extends React.Component<ICardProps>{
           <div className="card__info__name">
             {car.model_name}
           </div>
+          <div className="card__info__price">
+            {car.price} ₽
+          </div>
         </div>
       </div>
     )

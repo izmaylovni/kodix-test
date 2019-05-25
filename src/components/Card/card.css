@@ -15,7 +15,17 @@
       }
     }
 
-    &__name {}
+    &__name {
+      color: #5789F0;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    &__price{
+      
+      font-weight: 600;
+      font-size: 20px;
+    }
   }
 
 }

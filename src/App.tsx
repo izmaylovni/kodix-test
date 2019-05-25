@@ -3,22 +3,24 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk'
 import './css/index.css';
 import Catalog from './components/Catalog'
-import { fetchCars } from './store/actions';
+import Sorting from './components/Sorting'
+import { fetchCars, ActionTypes } from './store/cars/actions';
+import { RootState } from './store';
 
-interface ConnectedDispatch {
+interface IConnectedDispatch {
   fetchCars: () => void
 }
 
-class App extends React.Component<ConnectedDispatch> {
+class App extends React.Component<IConnectedDispatch> {
   componentDidMount() {
-    console.log('this.props:', this.props);
     this.props.fetchCars()
   }
 
   render() {
     return (
       <div className="App">
-        <div className="container">
+        <div className="">
+          <Sorting />
           <Catalog />
         </div>
       </div>
@@ -26,7 +28,7 @@ class App extends React.Component<ConnectedDispatch> {
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): ConnectedDispatch => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, ActionTypes>): IConnectedDispatch => {
   return {
     fetchCars: async () => {
       await dispatch(fetchCars())

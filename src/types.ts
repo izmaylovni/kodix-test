@@ -12,5 +12,11 @@ export interface ICar {
     longitude?: number | string;
     url?: string | null;
   };
-  images: string[]
+  images: string[];
+  distance: number;
+}
+
+export interface ICoordinates {
+  latitude?: number | string;
+  longitude?: number | string;
 }

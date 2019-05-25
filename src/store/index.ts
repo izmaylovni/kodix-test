@@ -1,9 +1,23 @@
-import { createStore, applyMiddleware } from 'redux'
-import { reducer } from './reducers'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 
+import { ICarsState } from './cars/types'
+import cars from './cars/reducers'
+
+import geoposition, { IGeoState } from './geoposition/reducers'
+
+export interface RootState {
+  cars: ICarsState
+  geoposition: IGeoState
+}
+
+const combinedReducers = combineReducers<RootState>({
+  cars,
+  geoposition
+})
+
 const store = createStore(
-  reducer,
+  combinedReducers,
   applyMiddleware(thunk)
 )
 
