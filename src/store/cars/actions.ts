@@ -10,6 +10,7 @@ import { RootState } from '..';
 export const FETCH_CARS = 'FETCH_CARS'
 export const SET_SORT = 'SET_SORT'
 export const SET_CARS = 'SET_CARS'
+export const SORT_CARS = 'SORT_CARS'
 
 interface ISetSortAction {
   type: typeof SET_SORT;
@@ -25,67 +26,65 @@ interface ISetCarsAction {
   cars: ICar[]
 }
 
-export type ActionTypes = IFetchCarsAction | ISetSortAction | ISetCarsAction;
+interface ISortCarsAction {
+  type: typeof SORT_CARS;
+}
+
+export type ActionTypes = IFetchCarsAction | ISetSortAction | ISetCarsAction | ISortCarsAction;
 
 export const setSort = (sort: Sort): ActionTypes => ({
   type: SET_SORT, sort: sort
 })
 
-export const changeSort = (sort: Sort): ThunkAction<Promise<void>, RootState, {}, ActionTypes> => {
-  return async (dispatch: ThunkDispatch<RootState, {}, ActionTypes>, getState: () => RootState) => {
-    dispatch({
-      type: SET_SORT,
-      sort
-    })
+export const setCars = (cars: ICar[]): ActionTypes => ({
+  type: SET_CARS,
+  cars
+})
 
-    dispatch({
-      type: SET_CARS,
-      cars: []
-    })
+export const sortCars = (): ActionTypes => ({
+  type: SORT_CARS,
+})
 
-    dispatch(fetchCars())
-  }
-}
-
-export const setCars = (cars: ICar[]): ActionTypes => {
-  return {
-    type: SET_CARS,
-    cars
+export const changeSort = (sort: Sort): ThunkAction<void, RootState, {}, ActionTypes> => {
+  return (dispatch: ThunkDispatch<RootState, {}, ActionTypes>, getState: () => RootState) => {
+    console.log('sort:', sort);
+    dispatch(setSort(sort))
+    dispatch(sortCars())
   }
 }
 
 export const fetchCars = (): ThunkAction<Promise<void>, RootState, {}, ActionTypes> => {
-  return async (dispatch: ThunkDispatch<RootState, {}, ActionTypes>, getState: () => RootState): Promise<void> => {
+  return (dispatch: ThunkDispatch<RootState, {}, ActionTypes>, getState: () => RootState): Promise<void> => {
     const { cars: carsState, geoposition: geoState } = getState()
     const { sort } = carsState
     const { currentPosition } = geoState
 
-    const getCarDistance = ({ longitude, latitude }: ICoordinates) => getDistance(
+    const getCarDistance = (dealer: ICoordinates) => getDistance(
       currentPosition,
-      {
-        longitude,
-        latitude,
-      }
+      dealer
     )
 
-    const response = await axios.get('/cars.json')
-    const cars: ICar[] = response.data.map((car: ICar) => ({
-      ...car,
-      distance: getCarDistance(car.dealer)
-    }))
-
-    switch (sort) {
-      case 'distance':
-        cars.sort((car1, car2) => {
-          return car1.distance - car2.distance
-        })
-        break
-      case 'price':
-        cars.sort((car1, car2) => car2.price - car1.price)
+    const processCar = async (car: ICar) => {
+      car.distance = await getCarDistance(car.dealer)
+      console.log('car.distance :', car.distance )
     }
 
-    setTimeout(() => {
-      dispatch(setCars(cars))
-    }, 1000)
+    return new Promise(async (resolve) => {
+      const response = await axios.get('/cars.json')
+      const cars: ICar[] = response.data
+
+      setTimeout(() => {
+        const { ymaps } = window
+
+        ymaps.ready(async () => {
+          const promises = cars.map(processCar)
+          await Promise.all(promises);
+          dispatch(setCars(cars))
+          dispatch(sortCars())
+          resolve()
+        })
+
+      }, 1000)
+    })
   }
 }
