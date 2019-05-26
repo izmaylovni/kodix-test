@@ -18,11 +18,9 @@ class App extends React.Component<IConnectedDispatch> {
 
   render() {
     return (
-      <div className="App">
-        <div className="">
-          <Sorting />
-          <Catalog />
-        </div>
+      <div className="App" id="App">
+        <Sorting />
+        <Catalog />
       </div>
     );
   }

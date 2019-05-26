@@ -66,7 +66,6 @@ export const fetchCars = (): ThunkAction<Promise<void>, RootState, {}, ActionTyp
 
     const processCar = async (car: ICar) => {
       car.distance = await getCarDistance(car.dealer)
-      console.log('car.distance :', car.distance )
     }
 
     return new Promise(async (resolve) => {

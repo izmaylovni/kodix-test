@@ -1,0 +1,18 @@
+.features-modal {
+  color: rgb(114, 114, 117);
+  font-weight: 500;
+  font-size: 13px;
+
+  &__title {
+    font-size: 16px;
+  }
+
+  &__list {
+    margin: 10px 0 2px;
+    padding-left: 15px;
+
+    &__item {
+      white-space: nowrap
+    }
+  }
+}

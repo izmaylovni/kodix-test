@@ -36,10 +36,10 @@ export default (state: ICarsState = initialState, action: ActionTypes) => {
 
       switch (sort) {
         case 'distance':
-          cars = cars.sort((car1, car2) => car2.distance - car1.distance)
+          cars = cars.sort((car1, car2) => car1.distance - car2.distance)
           break
         case 'price':
-          cars = cars.sort((car1, car2) => car2.price - car1.price)
+          cars = cars.sort((car1, car2) => car1.price - car2.price)
       }
       
       return {
